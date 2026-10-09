@@ -148,7 +148,7 @@ document.querySelectorAll('.sidebtn').forEach(b=>b.addEventListener('click',()=>
 function showAdminPage(page){document.querySelectorAll('.sidebtn').forEach(b=>b.classList.toggle('active',b.dataset.page===page));document.querySelectorAll('.admin-page').forEach(p=>p.classList.toggle('active',p.id==='page-'+page));renderAdmin()}
 async function renderAdmin(){if(currentProfile?.role!=='admin')return;
  const [members,plans,videos]=await Promise.all([
- sb.from('academy_memberships').select('*, academy_profiles(full_name,email,phone), academy_plans(name)').order('created_at',{ascending:false}),
+ sb.from('academy_memberships').select('*, academy_profiles!academy_memberships_user_id_fkey(full_name,email,phone), academy_plans(name)').order('created_at',{ascending:false}),
  sb.from('academy_plans').select('*').order('created_at'),
  sb.from('academy_videos').select('*').order('sort_order')]);
  for(const r of [members,plans,videos])if(r.error){showError(r.error);return}
